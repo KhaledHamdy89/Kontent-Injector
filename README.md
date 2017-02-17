@@ -1,4 +1,4 @@
-# Kontent-Injector
+# [Kontent-Injector](https://khaledhamdy89.github.io/Kontent-Injector/)
 
 The Kontent-Injector is a library that allows developers to generate files from templates easily and hassle-free.
 Instead of having tokens in a template to replace with your values, and write code to search for this specific token, or even seek a certain point in the template file and insert your content in, you simply use the Kontent-Injector:
