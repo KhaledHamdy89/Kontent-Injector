@@ -25,9 +25,11 @@ and send an object from ClassA, an object from ClassB and the template string/fi
 " Here is the AWESOME file from THE KONTENT-INJECTOR "
 ```
 # What's special about the Kontent-Injector
-1. You DON'T NEED to write any code no matter what template you use.
-2. You can have loops/Conditional statements inside your template to decide the content that will be injected into the template!
-3. Use the models you already have to inject values into the template without writing any code to get values from it, the Kontent-Injector will invoke the methods you put in the template.
+1. Quick to deploy. Quick to use. 
+2. You DON'T NEED to write any code no matter what template you use.
+3. You can have loops/Conditional statements inside your template to decide the content that will be injected into the template!
+4. Use the models you already have to inject values into the template without writing any code to get values from it, the Kontent-Injector will invoke the methods you put in the template.
+5. Everything is configurable.
 
 # How to use it in details:
 ## Configurations:
