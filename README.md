@@ -31,6 +31,7 @@ and send an object from ClassA, an object from ClassB and the template string/fi
 
 # How to use it in details:
 ## Configurations:
-## Classes Configurations:
+### Templates Configurations
+### Classes Configurations:
 ## Loops:
 ## Conditions:
