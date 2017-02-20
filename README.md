@@ -33,7 +33,19 @@ and send an object from ClassA, an object from ClassB and the template string/fi
 
 # How to use it in details:
 ## Configurations:
+The Kontent-Injector is fully configurable, and the KI configurations can be devided into two sections
 ### Templates Configurations:
+The template configurations are related to how templates are written.
+You can change:
+1. The injection token, that is the set of symbols (or letters if desired) that indicates that there is an injection to be made, default symbols are "$%$" (Without the quotes). So if we were to change the default and make it "#" the template is written as follows:
+```
+The value is: #Class.Method#
+```
+2. The Loop start/end words, and those are two words indicating that the KI should treat the enclosed template as a loop (Loops are explained later in more details). Notice that the start and end words are enclosed with the injection token too. The default is "LOOP" and "ENDLOOP" for the start and end words respectively (Without the quotes). So an example for a loop can be as follows (With the injection token changed to "#"):
+```
+#LOOP# This is a loop for #Class.LoopMethod# ... #ENDLOOP#
+```
 ### Classes Configurations:
+Classes configurations are simply for protection and flexibility. The KI can let you define aliases for your classes, so you don't need to use your classes' names in the template, and the same goes for methods.
 ## Loops:
 ## Conditions:
