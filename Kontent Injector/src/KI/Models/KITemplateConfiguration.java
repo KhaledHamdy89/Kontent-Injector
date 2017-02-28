@@ -24,6 +24,7 @@ import java.util.Map;
  * Loop End Word: ENDLOOP
  * <p>
  * Created by Khaled.Hamdy on 2/14/17.
+ * Copyright (c) 2017 Khaled Hamdy
  */
 public class KITemplateConfiguration {
     private String injectionToken = "$%$";
@@ -157,7 +158,7 @@ public class KITemplateConfiguration {
     }
 
     private void validateAgainstInjectionKeywords(String test) throws InvalidInputException {
-        if(test.equals(injectionToken) || test.equals(loopStartWord) || test.equals(loopEndWord))
+        if (test.equals(injectionToken) || test.equals(loopStartWord) || test.equals(loopEndWord))
             throw new InvalidInputException(InvalidityType.CONFLICTING_ALIAS);
     }
 

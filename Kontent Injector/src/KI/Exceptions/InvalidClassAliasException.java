@@ -5,7 +5,9 @@ import java.text.MessageFormat;
 /**
  * Invalid class alias exception is thrown if an invalid alias is sent.
  * Invalid alias such as an empty string, null, injection token, loop start/end word
+ * <p>
  * Created by khaled.hamdy on 2/20/17.
+ * Copyright (c) 2017 Khaled Hamdy
  */
 public class InvalidClassAliasException extends InvalidInputException {
 

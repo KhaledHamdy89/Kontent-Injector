@@ -2,7 +2,9 @@ package KI.Exceptions;
 
 /**
  * An enum containing all possible invalidity types with their messages
+ * <p>
  * Created by khaled.hamdy on 2/28/17.
+ * Copyright (c) 2017 Khaled Hamdy
  */
 public enum InvalidityType {
     EMPTY_STRING("The alias cannot be an empty string"),
