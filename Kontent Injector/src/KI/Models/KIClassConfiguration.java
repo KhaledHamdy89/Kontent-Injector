@@ -33,6 +33,13 @@ public class KIClassConfiguration {
     }
 
     /**
+     * Remove class alias
+     */
+    public void removeClassAlias() {
+        classAlias = null;
+    }
+
+    /**
      * Add an alias to a method contained inside the target class
      *
      * @param methodName  The name of the method
@@ -69,4 +76,21 @@ public class KIClassConfiguration {
     public String getMethodName(String methodAlias) {
         return methodsAliases.getOrDefault(methodAlias, methodAlias);
     }
+
+    /**
+     * Remove method Alias
+     * @param methodAlias method's alias
+     */
+    public void removeMethodAlias(String methodAlias) {
+        methodsAliases.remove(methodAlias);
+    }
+
+    /**
+     * Get all methods aliases
+     * @return A map holding the methods aliases (keys) and the actual method names (values)
+     */
+    Map<String, String> getMethodsAliases() {
+        return methodsAliases;
+    }
+
 }

@@ -5,7 +5,9 @@ import KI.Exceptions.InvalidityType;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * KI Configuration model is the model that holds the data needed to parse a template
@@ -30,7 +32,7 @@ public class KITemplateConfiguration {
     private String injectionToken = "$%$";
     private String loopStartWord = "LOOP";
     private String loopEndWord = "ENDLOOP";
-    private Map<Class<?>, KIClassConfiguration> classesAliases = new HashMap<>();
+    private Map<Class<?>, KIClassConfiguration> classesConfigurations = new HashMap<>();
 
     /**
      * Configuration object holding the Kontent Injector's template configurations.
@@ -55,8 +57,12 @@ public class KITemplateConfiguration {
      * Sets the injection token used in a template
      *
      * @param injectionToken The string to be used as an injection token
+     * @throws InvalidInputException An Invalid input exception is thrown if the string is conflicting with
+     *                               other injection keywords
      */
-    public void setInjectionToken(String injectionToken) {
+    public void setInjectionToken(String injectionToken) throws InvalidInputException {
+        if (injectionToken.equals(loopEndWord) || injectionToken.equals(loopStartWord))
+            throw new InvalidInputException(InvalidityType.DUPLICATE_INJECTION_KEYWORD);
         this.injectionToken = injectionToken;
     }
 
@@ -73,8 +79,12 @@ public class KITemplateConfiguration {
      * Set the loop start word to be used in a template
      *
      * @param loopStartWord The string to be used as a loop start word
+     * @throws InvalidInputException An Invalid input exception is thrown if the string is conflicting with
+     *                               other injection keywords
      */
-    public void setLoopStartWord(String loopStartWord) {
+    public void setLoopStartWord(String loopStartWord) throws InvalidInputException {
+        if (loopStartWord.equals(loopEndWord) || loopStartWord.equals(injectionToken))
+            throw new InvalidInputException(InvalidityType.DUPLICATE_INJECTION_KEYWORD);
         this.loopStartWord = loopStartWord;
     }
 
@@ -91,8 +101,12 @@ public class KITemplateConfiguration {
      * Set the loop end word to be used in a template
      *
      * @param loopEndWord The string to be used as a loop end word
+     * @throws InvalidInputException An Invalid input exception is thrown if the string is conflicting with
+     *                               other injection keywords
      */
-    public void setLoopEndWord(String loopEndWord) {
+    public void setLoopEndWord(String loopEndWord) throws InvalidInputException {
+        if (loopEndWord.equals(loopStartWord) || loopEndWord.equals(injectionToken))
+            throw new InvalidInputException(InvalidityType.DUPLICATE_INJECTION_KEYWORD);
         this.loopEndWord = loopEndWord;
     }
 
@@ -106,9 +120,15 @@ public class KITemplateConfiguration {
     public void addClassAlias(Class<?> targetClass, String alias) throws InvalidInputException {
         validateInput(targetClass);
         validateInput(alias);
-        KIClassConfiguration classConfig = classesAliases.getOrDefault(targetClass, new KIClassConfiguration(targetClass));
+        KIClassConfiguration classConfig = classesConfigurations.getOrDefault(targetClass, new KIClassConfiguration(targetClass));
         classConfig.setClassAlias(alias);
-        classesAliases.put(targetClass, classConfig);
+        classesConfigurations.put(targetClass, classConfig);
+        try {
+            validateConfigurations();
+        } catch (InvalidInputException ex) {
+            classConfig.removeClassAlias();
+            throw ex;
+        }
     }
 
     /**
@@ -126,9 +146,15 @@ public class KITemplateConfiguration {
         validateInput(methodAlias);
         validateClassMethod(targetClass, methodName);
 
-        KIClassConfiguration classConfig = classesAliases.getOrDefault(targetClass, new KIClassConfiguration(targetClass));
+        KIClassConfiguration classConfig = classesConfigurations.getOrDefault(targetClass, new KIClassConfiguration(targetClass));
         classConfig.addMethodAlias(methodName, methodAlias);
-        classesAliases.put(targetClass, classConfig);
+        classesConfigurations.put(targetClass, classConfig);
+        try {
+            validateConfigurations();
+        } catch (InvalidInputException ex) {
+            classConfig.removeMethodAlias(methodName);
+            throw ex;
+        }
     }
 
     /**
@@ -137,29 +163,73 @@ public class KITemplateConfiguration {
      * @param targetClass The target class to remove the alias for
      */
     public void removeClassAlias(Class<?> targetClass) {
-        KIClassConfiguration classConfig = classesAliases.get(targetClass);
+        KIClassConfiguration classConfig = classesConfigurations.get(targetClass);
         if (classConfig == null)
             return;
         classConfig.setClassAlias(null);
     }
 
     /**
+     * Get all class configurations
+     * @param targetClass The class to get its configuration
+     * @return A KIClassConfiguration object holding the class' configurations
+     */
+    public KIClassConfiguration getClassConfiguration(Class<?> targetClass) {
+        return classesConfigurations.get(targetClass);
+    }
+
+    /**
      * Clears all classes aliases
      */
     public void clearClassesAliases() {
-        classesAliases.clear();
+        classesConfigurations.clear();
     }
 
-    void validateConfigurations() throws InvalidInputException {
-        for (KIClassConfiguration config : classesAliases.values()) {
-            validateAgainstInjectionKeywords(config.getTargetClassAlias());
-            validateAgainstInjectionKeywords(config.getTargetClassAlias());
+    /**
+     * Validate injection configurations
+     *
+     * @throws InvalidInputException An Invalid Input Exception indicates that either that there are duplicate aliases
+     *                               among classes and methods aliases, or that an alias is conflicting with injection
+     *                               keywords
+     */
+    private void validateConfigurations() throws InvalidInputException {
+        Set<String> aliasesSet = new HashSet<>();
+
+        for (KIClassConfiguration config : classesConfigurations.values()) {
+            String targetClassAlias = config.getTargetClassAlias();
+
+            if (!aliasesSet.add(targetClassAlias))
+                throw new InvalidInputException(InvalidityType.DUPLICATE_ALIAS);
+
+            validateAgainstInjectionKeywords(targetClassAlias);
+            validateMethodsAliases(aliasesSet, config);
         }
     }
 
+    /**
+     * Validate methods aliases inside a class config
+     *
+     * @param aliasesSet The set containing all aliases
+     * @param config     The class configuration containing methods aliases
+     * @throws InvalidInputException An Exception indicating the invalid inputs
+     */
+    private void validateMethodsAliases(Set<String> aliasesSet, KIClassConfiguration config) throws InvalidInputException {
+        for (String methodAlias : config.getMethodsAliases().keySet()) {
+            if (!aliasesSet.add(methodAlias))
+                throw new InvalidInputException(InvalidityType.DUPLICATE_ALIAS);
+            validateAgainstInjectionKeywords(methodAlias);
+        }
+    }
+
+    /**
+     * Validate a string against the injection keywords
+     *
+     * @param test Test string
+     * @throws InvalidInputException An exception indicating a conflict with injection keywords
+     */
     private void validateAgainstInjectionKeywords(String test) throws InvalidInputException {
         if (test.equals(injectionToken) || test.equals(loopStartWord) || test.equals(loopEndWord))
-            throw new InvalidInputException(InvalidityType.CONFLICTING_ALIAS);
+            throw new InvalidInputException(InvalidityType.INJECTION_KEYWORDS_CONFLICT);
     }
 
     /**
@@ -172,13 +242,13 @@ public class KITemplateConfiguration {
     private void validateClassMethod(Class<?> targetClass, String methodName) throws InvalidInputException {
         Method targetMethod = null;
         for (Method method : targetClass.getMethods()) {
-            if (method.getName() != methodName)
+            if (!method.getName().equals(methodName))
                 continue;
             targetMethod = method;
             break;
         }
         if (targetMethod == null)
-            throw new InvalidInputException(InvalidityType.METHOD_DOESNT_EXIST);
+            throw new InvalidInputException(InvalidityType.METHOD_DOES_NOT_EXIST);
 
         if (targetMethod.getParameters().length > 0)
             throw new InvalidInputException(InvalidityType.METHOD_SHOULD_NOT_HAVE_PARAMETERS);
