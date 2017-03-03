@@ -24,9 +24,15 @@
 
 package KI.Core;
 
+import KI.Exceptions.InvalidInputException;
 import KI.Models.KITemplateConfiguration;
 
+import java.io.*;
+
 /**
+ * The KontentInjector class is the class responsible for initiating the injection process
+ * and generating the output files after injection.
+ * <p>
  * Created by khaled.hamdy on 2/14/17.
  */
 public class KontentInjector {
@@ -34,13 +40,41 @@ public class KontentInjector {
     private KITemplateConfiguration currentKIConfig;
 
     public KontentInjector() {
-        KITemplateConfiguration defaultConfig = new KITemplateConfiguration();
+        this(new KITemplateConfiguration());
     }
 
-    public KontentInjector(KITemplateConfiguration KIConfig) {
+    public KontentInjector(KITemplateConfiguration injectionConfig) {
+        configureInjector(injectionConfig);
     }
 
-    public void configureInjector(KITemplateConfiguration KIConfig) {
+    public void configureInjector(KITemplateConfiguration injectionConfig) {
+        this.currentKIConfig = injectionConfig;
+    }
 
+    public void injectValues(String templateString, StringBuilder outputString, Object... contentObjects) throws InvalidInputException {
+        InputValidator.validate(templateString);
+        injectValues(new StringReader(templateString), outputString, null, contentObjects);
+    }
+
+    public void injectValues(String templateString, File outputFile, Object... contentObjects) throws InvalidInputException {
+        InputValidator.validate(templateString);
+        injectValues(new StringReader(templateString), null, outputFile, contentObjects);
+    }
+
+    public void injectValues(File templateFile, StringBuilder outputString, Object... contentObjects) throws FileNotFoundException, InvalidInputException {
+        InputValidator.validate(templateFile);
+        injectValues(new FileReader(templateFile), outputString, null, contentObjects);
+    }
+
+    public void injectValues(File templateFile, File outputFile, Object... contentObjects) throws FileNotFoundException, InvalidInputException {
+        InputValidator.validate(templateFile);
+        injectValues(new FileReader(templateFile), null, outputFile, contentObjects);
+
+    }
+
+    private void injectValues(Reader reader, StringBuilder outputString, File outputFile, Object[] contentObjects) {
+        if (contentObjects.length == 0)
+            return;
+        BufferedReader bufferReader = new BufferedReader(reader);
     }
 }

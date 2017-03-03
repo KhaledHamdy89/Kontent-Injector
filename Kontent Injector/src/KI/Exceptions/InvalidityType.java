@@ -36,7 +36,8 @@ public enum InvalidityType {
     METHOD_DOES_NOT_EXIST("No method was found with the provided name in the target class"),
     METHOD_SHOULD_NOT_HAVE_PARAMETERS("The method provided is expecting parameters, please use a parameter-less method for injection"),
     DUPLICATE_ALIAS("There are duplicate aliases among classes and methods aliases"),
-    DUPLICATE_INJECTION_KEYWORD("Duplicate injection keywords, please use a different string");
+    DUPLICATE_INJECTION_KEYWORD("Duplicate injection keywords, please use a different string"),
+    EMPTY_COLLECTION("The collection sent is empty");
 
     private String errorMessage;
 

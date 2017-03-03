@@ -24,6 +24,7 @@
 
 package KI.Models;
 
+import KI.Core.InputValidator;
 import KI.Exceptions.InvalidInputException;
 import KI.Exceptions.InvalidityType;
 
@@ -141,8 +142,8 @@ public class KITemplateConfiguration {
      * @throws InvalidInputException An invalid input exception is thrown if any of the input parameters is null or empty
      */
     public void addClassAlias(Class<?> targetClass, String alias) throws InvalidInputException {
-        validateInput(targetClass);
-        validateInput(alias);
+        InputValidator.validate(targetClass);
+        InputValidator.validate(alias);
         KIClassConfiguration classConfig = classesConfigurations.getOrDefault(targetClass, new KIClassConfiguration(targetClass));
         classConfig.setClassAlias(alias);
         classesConfigurations.put(targetClass, classConfig);
@@ -164,9 +165,9 @@ public class KITemplateConfiguration {
      *                               or if the class doesn't contain the a method with the name sent in the parameters
      */
     public void addMethodAlias(Class<?> targetClass, String methodName, String methodAlias) throws InvalidInputException {
-        validateInput(targetClass);
-        validateInput(methodName);
-        validateInput(methodAlias);
+        InputValidator.validate(targetClass);
+        InputValidator.validate(methodName);
+        InputValidator.validate(methodAlias);
         validateClassMethod(targetClass, methodName);
 
         KIClassConfiguration classConfig = classesConfigurations.getOrDefault(targetClass, new KIClassConfiguration(targetClass));
@@ -277,21 +278,6 @@ public class KITemplateConfiguration {
         if (targetMethod.getParameters().length > 0)
             throw new InvalidInputException(InvalidityType.METHOD_SHOULD_NOT_HAVE_PARAMETERS);
 
-    }
-
-    /**
-     * Validates an object is not null, or if the object is a string, that it's not empty
-     *
-     * @param inputObject The target object to be validated
-     * @throws InvalidInputException An exception containing the invalidity type
-     */
-    private void validateInput(Object inputObject) throws InvalidInputException {
-        if (inputObject == null)
-            throw new InvalidInputException(InvalidityType.NULL);
-        if (!(inputObject instanceof String))
-            return;
-        if (((String) inputObject).isEmpty())
-            throw new InvalidInputException(InvalidityType.EMPTY_STRING);
     }
 
 
