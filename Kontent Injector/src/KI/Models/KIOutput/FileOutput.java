@@ -73,7 +73,7 @@ public class FileOutput implements IKIOutput {
     }
 
     @Override
-    public void outputEnded() {
+    public void handleOutputEnd() {
         fileWriter.close();
     }
 }

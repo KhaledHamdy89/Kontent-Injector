@@ -49,6 +49,6 @@ public class StringBuilderOutput implements IKIOutput {
     }
 
     @Override
-    public void outputEnded() {
+    public void handleOutputEnd() {
     }
 }

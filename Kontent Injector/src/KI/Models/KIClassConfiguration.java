@@ -42,7 +42,7 @@ public class KIClassConfiguration {
      *
      * @param targetClass The target class
      */
-    KIClassConfiguration(Class<?> targetClass) {
+    public KIClassConfiguration(Class<?> targetClass) {
         this.targetClass = targetClass;
     }
 
@@ -102,14 +102,22 @@ public class KIClassConfiguration {
 
     /**
      * Remove method Alias
-     * @param methodAlias method's alias
+     *
+     * @param methodName method's name
      */
-    void removeMethodAlias(String methodAlias) {
-        methodsAliases.remove(methodAlias);
+    void removeMethodAlias(String methodName) {
+        String targetMethodAlias = "";
+        for (Map.Entry<String, String> methodMapping : methodsAliases.entrySet()) {
+            if(!methodMapping.getValue().equals(methodName))
+                continue;
+            methodsAliases.get(methodMapping.getKey());
+            return;
+        }
     }
 
     /**
      * Get all methods aliases
+     *
      * @return A map holding the methods aliases (keys) and the actual method names (values)
      */
     Map<String, String> getMethodsAliases() {

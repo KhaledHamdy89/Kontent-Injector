@@ -22,25 +22,26 @@
  * SOFTWARE.
  */
 
-package KI.Models.KIOutput;
+package KI.Core;
+
+import KI.Models.KIClassConfiguration;
+
+import java.util.Map;
 
 /**
- * IKIOutput is an interface allowing the user to extend the Kontent-Injector's output methods
- * by implementing the interface to determine how the output is handled
  * Created by khaled.hamdy on 3/9/17.
  */
-public interface IKIOutput {
-    /**
-     * Write a line after injection
-     *
-     * @param outputLine The output line after injection
-     */
-    void writeLine(String outputLine);
+class KIInjectionEngine {
 
-    /**
-     * The handleOutputEnd method is ONLY called at the end of injection.
-     * It's highly recommended that if the writing method uses a stream,
-     * to close the stream in the handleOutputEnd method.
-     */
-    void handleOutputEnd();
+    public KIInjectionEngine(Map<Class<?>, KIClassConfiguration> classesConfigurations, Object[] contentObjects) {
+
+    }
+
+    public String InjectLoop(String loopBlock) {
+        return null;
+    }
+
+    public String InjectSngleLine(String templateLine) {
+        return null;
+    }
 }

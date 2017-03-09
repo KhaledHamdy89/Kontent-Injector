@@ -38,17 +38,62 @@ public class KontentInjector {
 
     private KITemplateConfiguration currentKIConfig;
 
+    public KontentInjector() {
+        currentKIConfig = new KITemplateConfiguration();
+    }
+
     public KontentInjector(KITemplateConfiguration injectionConfig) {
         configureInjector(injectionConfig);
     }
 
+    /**
+     * Provide the configuration to be used in the injection process
+     *
+     * @param injectionConfig The template configuration to be used in the injection
+     */
     public void configureInjector(KITemplateConfiguration injectionConfig) {
         this.currentKIConfig = injectionConfig;
     }
 
-    private void injectValues(IKIInput inputMethod, IKIOutput outputMethod, Object... contentObjects){
+    /**
+     * Start the content injection process
+     *
+     * @param inputMethod    Used to provide a template as an input to the KI
+     * @param outputMethod   Used by the KI to write the generated output after injection
+     * @param contentObjects The objects containing the content to be injected into a template
+     */
+    private void injectValues(IKIInput inputMethod, IKIOutput outputMethod, Object... contentObjects) {
         if (contentObjects.length == 0)
             return;
+
+        String templateLine;
+        String loopBlock = "";
+        String injectionOutput;
+        KIInjectionEngine injectionEngine = new KIInjectionEngine(currentKIConfig.getClassesConfigurations(), contentObjects);
+
+        while ((templateLine = inputMethod.readTemplateLine()) != null) {
+            injectionOutput = "";
+
+            if (!loopBlock.isEmpty())
+                loopBlock += "\n" + templateLine;
+
+            if (templateLine.contains(currentKIConfig.getLoopStartWord())) {
+                loopBlock = templateLine;
+                continue;
+            }
+
+            if (templateLine.contains(currentKIConfig.getLoopEndWord())) {
+                injectionOutput = injectionEngine.InjectLoop(loopBlock);
+                loopBlock = "";
+            }
+
+            if (templateLine.contains(currentKIConfig.getInjectionToken())) {
+                injectionOutput = injectionEngine.InjectSngleLine(templateLine);
+            }
+
+            outputMethod.writeLine(injectionOutput);
+        }
+        outputMethod.handleOutputEnd();
     }
 
 }

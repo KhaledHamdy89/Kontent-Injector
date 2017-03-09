@@ -184,13 +184,22 @@ public class KITemplateConfiguration {
     }
 
     /**
+     * Remove a method alias from the class
+     *
+     * @param targetClass The target class containing the method
+     * @param methodName  The method to remove the alias for
+     */
+    public void removeMethodAlias(Class<?> targetClass, String methodName) {
+        classesConfigurations.get(targetClass).removeMethodAlias(methodName);
+    }
+
+    /**
      * Get all class configurations
      *
-     * @param targetClass The class to get its configuration
      * @return A KIClassConfiguration object holding the class' configurations
      */
-    public KIClassConfiguration getClassConfiguration(Class<?> targetClass) {
-        return classesConfigurations.get(targetClass);
+    public Map<Class<?>, KIClassConfiguration> getClassesConfigurations() {
+        return classesConfigurations;
     }
 
     /**
