@@ -59,16 +59,6 @@ public class KITemplateConfiguration {
     private Map<Class<?>, KIClassConfiguration> classesConfigurations = new HashMap<>();
 
     /**
-     * Configuration object holding the Kontent Injector's template configurations.
-     * Defaults:
-     * Injection Token: $%$
-     * Loop Start Word: LOOP
-     * Loop End Word: ENDLOOP
-     */
-    public KITemplateConfiguration() {
-    }
-
-    /**
      * Gets the injection token used in a template
      *
      * @return A string holding the injection template (Default: $%$)
@@ -279,6 +269,5 @@ public class KITemplateConfiguration {
             throw new InvalidInputException(InvalidityType.METHOD_SHOULD_NOT_HAVE_PARAMETERS);
 
     }
-
 
 }

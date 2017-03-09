@@ -22,33 +22,25 @@
  * SOFTWARE.
  */
 
-package KI.Core;
-
-import KI.Models.KIInput.IKIInput;
-import KI.Models.KIOutput.IKIOutput;
-import KI.Models.KITemplateConfiguration;
+package KI.Models.KIOutput;
 
 /**
- * The KontentInjector class is the class responsible for initiating the injection process
- * and generating the output files after injection.
- * <p>
- * Created by khaled.hamdy on 2/14/17.
+ * IKIOutput is an interface allowing the user to extend the Kontent-Injector's output methods
+ * by implementing the interface to determine how the output is handled
+ * Created by khaled.hamdy on 3/9/17.
  */
-public class KontentInjector {
+public interface IKIOutput {
+    /**
+     * Write a line after injection
+     *
+     * @param outputLine The output line after injection
+     */
+    void writeLine(String outputLine);
 
-    private KITemplateConfiguration currentKIConfig;
-
-    public KontentInjector(KITemplateConfiguration injectionConfig) {
-        configureInjector(injectionConfig);
-    }
-
-    public void configureInjector(KITemplateConfiguration injectionConfig) {
-        this.currentKIConfig = injectionConfig;
-    }
-
-    private void injectValues(IKIInput inputMethod, IKIOutput outputMethod, Object... contentObjects){
-        if (contentObjects.length == 0)
-            return;
-    }
-
+    /**
+     * The outputEnded method is ONLY called at the end of injection.
+     * It's highly recommended that if the writing method uses a stream,
+     * to close the stream in the outputEnded method.
+     */
+    void outputEnded();
 }

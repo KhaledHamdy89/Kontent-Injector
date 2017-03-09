@@ -22,33 +22,21 @@
  * SOFTWARE.
  */
 
-package KI.Core;
-
-import KI.Models.KIInput.IKIInput;
-import KI.Models.KIOutput.IKIOutput;
-import KI.Models.KITemplateConfiguration;
+package KI.Models.KIInput;
 
 /**
- * The KontentInjector class is the class responsible for initiating the injection process
- * and generating the output files after injection.
+ * IKIInput is an interface allowing the user to extend the Kontent-Injector's input methods
+ * by implementing the interface
  * <p>
- * Created by khaled.hamdy on 2/14/17.
+ * Created by khaled.hamdy on 3/9/17.
  */
-public class KontentInjector {
-
-    private KITemplateConfiguration currentKIConfig;
-
-    public KontentInjector(KITemplateConfiguration injectionConfig) {
-        configureInjector(injectionConfig);
-    }
-
-    public void configureInjector(KITemplateConfiguration injectionConfig) {
-        this.currentKIConfig = injectionConfig;
-    }
-
-    private void injectValues(IKIInput inputMethod, IKIOutput outputMethod, Object... contentObjects){
-        if (contentObjects.length == 0)
-            return;
-    }
-
+public interface IKIInput {
+    /**
+     * Return a template's line. It's expected from the class implementing the IKIInput
+     * to have the ability to maintain the lines' iterations
+     *
+     * @return The current line in the template or null if no more lines are available
+     */
+    String readTemplateLine();
+    
 }

@@ -22,33 +22,37 @@
  * SOFTWARE.
  */
 
-package KI.Core;
+package KI.Models.KIInput;
 
-import KI.Models.KIInput.IKIInput;
-import KI.Models.KIOutput.IKIOutput;
-import KI.Models.KITemplateConfiguration;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 /**
- * The KontentInjector class is the class responsible for initiating the injection process
- * and generating the output files after injection.
- * <p>
- * Created by khaled.hamdy on 2/14/17.
+ * An abstract class handling buffered reader inputs
+ * Created by khaled.hamdy on 3/9/17.
  */
-public class KontentInjector {
+public abstract class AbstractBufferedReaderInput  implements IKIInput{
 
-    private KITemplateConfiguration currentKIConfig;
+    private BufferedReader templateReader;
 
-    public KontentInjector(KITemplateConfiguration injectionConfig) {
-        configureInjector(injectionConfig);
+    /**
+     * The buffered reader to be used to read the template
+     * @param templateReader
+     */
+    public AbstractBufferedReaderInput(BufferedReader templateReader){
+        this.templateReader = templateReader;
     }
 
-    public void configureInjector(KITemplateConfiguration injectionConfig) {
-        this.currentKIConfig = injectionConfig;
+    @Override
+    public String readTemplateLine() {
+        try {
+            String line = templateReader.readLine();
+            if (line == null)
+                templateReader.close();
+            return line;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-
-    private void injectValues(IKIInput inputMethod, IKIOutput outputMethod, Object... contentObjects){
-        if (contentObjects.length == 0)
-            return;
-    }
-
 }

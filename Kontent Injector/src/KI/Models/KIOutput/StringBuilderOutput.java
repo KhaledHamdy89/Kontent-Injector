@@ -22,33 +22,33 @@
  * SOFTWARE.
  */
 
-package KI.Core;
-
-import KI.Models.KIInput.IKIInput;
-import KI.Models.KIOutput.IKIOutput;
-import KI.Models.KITemplateConfiguration;
+package KI.Models.KIOutput;
 
 /**
- * The KontentInjector class is the class responsible for initiating the injection process
- * and generating the output files after injection.
- * <p>
- * Created by khaled.hamdy on 2/14/17.
+ * The String builder Output allows the user to pass a string builder
+ * object to be used by the KI to write the output to after processing
+ * Created by khaled.hamdy on 3/9/17.
  */
-public class KontentInjector {
+public class StringBuilderOutput implements IKIOutput {
 
-    private KITemplateConfiguration currentKIConfig;
+    private StringBuilder outputStringBuilder;
 
-    public KontentInjector(KITemplateConfiguration injectionConfig) {
-        configureInjector(injectionConfig);
+    /**
+     * The String builder Output allows the user to pass a string builder
+     * object to be used by the KI to write the output to after processing
+     *
+     * @param outputStringBuilder The string builder object to be used by the KI
+     */
+    public StringBuilderOutput(StringBuilder outputStringBuilder) {
+        this.outputStringBuilder = outputStringBuilder;
     }
 
-    public void configureInjector(KITemplateConfiguration injectionConfig) {
-        this.currentKIConfig = injectionConfig;
+    @Override
+    public void writeLine(String outputLine) {
+        outputStringBuilder.append(outputLine);
     }
 
-    private void injectValues(IKIInput inputMethod, IKIOutput outputMethod, Object... contentObjects){
-        if (contentObjects.length == 0)
-            return;
+    @Override
+    public void outputEnded() {
     }
-
 }

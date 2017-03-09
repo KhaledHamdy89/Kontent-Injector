@@ -22,33 +22,24 @@
  * SOFTWARE.
  */
 
-package KI.Core;
+package KI.Models.KIInput;
 
-import KI.Models.KIInput.IKIInput;
-import KI.Models.KIOutput.IKIOutput;
-import KI.Models.KITemplateConfiguration;
+import java.io.*;
 
 /**
- * The KontentInjector class is the class responsible for initiating the injection process
- * and generating the output files after injection.
- * <p>
- * Created by khaled.hamdy on 2/14/17.
+ * File Input allows the user to pass the template file to the KI
+ * Created by khaled.hamdy on 3/9/17.
  */
-public class KontentInjector {
+public class FileInput extends AbstractBufferedReaderInput {
 
-    private KITemplateConfiguration currentKIConfig;
-
-    public KontentInjector(KITemplateConfiguration injectionConfig) {
-        configureInjector(injectionConfig);
-    }
-
-    public void configureInjector(KITemplateConfiguration injectionConfig) {
-        this.currentKIConfig = injectionConfig;
-    }
-
-    private void injectValues(IKIInput inputMethod, IKIOutput outputMethod, Object... contentObjects){
-        if (contentObjects.length == 0)
-            return;
+    /**
+     * File Input allows the user to pass the template file to the KI
+     *
+     * @param templateFile The file containing the path of the template
+     * @throws FileNotFoundException A FileNotFoundException will be thrown if the file sent does not exist
+     */
+    public FileInput(File templateFile) throws FileNotFoundException {
+        super(new BufferedReader(new FileReader(templateFile)));
     }
 
 }
