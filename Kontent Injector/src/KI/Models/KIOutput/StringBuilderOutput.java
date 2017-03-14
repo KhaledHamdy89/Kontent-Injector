@@ -31,7 +31,7 @@ package KI.Models.KIOutput;
  */
 public class StringBuilderOutput implements IKIOutput {
 
-    private StringBuilder outputStringBuilder;
+    private final StringBuilder outputStringBuilder;
 
     /**
      * The String builder Output allows the user to pass a string builder

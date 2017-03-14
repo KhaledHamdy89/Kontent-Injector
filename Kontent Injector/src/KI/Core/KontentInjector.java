@@ -62,7 +62,7 @@ public class KontentInjector {
      * @param outputMethod   Used by the KI to write the generated output after injection
      * @param contentObjects The objects containing the content to be injected into a template
      */
-    private void injectValues(IKIInput inputMethod, IKIOutput outputMethod, Object... contentObjects) {
+    private void injectValues(IKIInput inputMethod, IKIOutput outputMethod, Object... contentObjects) throws ReflectiveOperationException {
         if (contentObjects.length == 0)
             return;
 

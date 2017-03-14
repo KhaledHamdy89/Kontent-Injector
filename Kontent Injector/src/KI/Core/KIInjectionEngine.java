@@ -27,10 +27,12 @@ package KI.Core;
 import KI.Models.KIClassConfiguration;
 import KI.Models.KITemplateConfiguration;
 
-import java.util.ArrayList;
+import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
 
 /**
  * The injection engine is the core that is used to inject content into a template.
@@ -42,9 +44,9 @@ import java.util.Map;
 class KIInjectionEngine {
 
     private final KITemplateConfiguration templateConfig;
-    private Map<String, InjectionEngineCache> injectionCache;
+    private final Map<String, InjectionEngineCache> injectionCache;
 
-    public KIInjectionEngine(KITemplateConfiguration templateConfig, Object[] contentObjects) {
+    KIInjectionEngine(KITemplateConfiguration templateConfig, Object[] contentObjects) {
         this.templateConfig = templateConfig;
         injectionCache = new HashMap<>(contentObjects.length);
         initializeCache(templateConfig.getClassesConfigurations(), contentObjects);
@@ -60,16 +62,51 @@ class KIInjectionEngine {
         }
     }
 
-    public String InjectLoop(String loopBlock) {
+    String InjectLoop(String loopBlock) {
+        // TODO: Implement Loop injection
         return null;
     }
 
-    public String InjectSingleLine(String templateLine) {
-        return null;
+    String InjectSingleLine(String templateLine) throws ReflectiveOperationException {
+        String injectedLine = templateLine;
+
+        Set<String> injectionTemplates = fetchInjectionTemplates(templateLine);
+
+        if (injectionTemplates.size() == 0)
+            return injectedLine;
+
+        for (String injectionTemplate : injectionTemplates) {
+
+            Object injectionValue = fetchInjectionValue(injectionTemplate);
+
+            if (injectionValue == null)
+                continue;
+
+            injectedLine = injectedLine.replaceAll(Matcher.quoteReplacement(injectionTemplate), injectionValue.toString());
+        }
+
+        return injectedLine;
     }
 
-    private List<String> fetchInjectionTemplates(String line) {
-        List<String> injectionTemplates = new ArrayList<>();
+    private Object fetchInjectionValue(String injectionTemplate) throws ReflectiveOperationException {
+
+        injectionTemplate = injectionTemplate.replaceAll(Matcher.quoteReplacement(templateConfig.getInjectionToken()), "");
+
+        String[] injectionTemplateParts = injectionTemplate.split("\\.");
+
+        if (injectionTemplateParts.length != 2)
+            return null;
+
+        String injectionClass = injectionTemplateParts[0];
+        String injectionMethod = injectionTemplateParts[1];
+
+        InjectionEngineCache targetClassInjection = injectionCache.get(injectionClass);
+
+        return targetClassInjection.fetchInjection(injectionMethod);
+    }
+
+    private Set<String> fetchInjectionTemplates(String line) {
+        Set<String> injectionTemplates = new HashSet<>();
         String token = templateConfig.getInjectionToken();
 
         if (!line.contains(token))
@@ -80,13 +117,15 @@ class KIInjectionEngine {
         int tokenSize = templateConfig.getInjectionToken().length();
 
         while ((indexOfFirstToken = line.indexOf(token, indexOfSecondToken)) != -1) {
-            indexOfSecondToken = line.indexOf(token, indexOfFirstToken);
+            indexOfSecondToken = line.indexOf(token, indexOfFirstToken + tokenSize);
 
             if (indexOfSecondToken <= indexOfFirstToken)
                 break;
 
-            int substringStart = indexOfFirstToken + tokenSize;
-            injectionTemplates.add(line.substring(substringStart, indexOfSecondToken));
+            String injectionTemplate = line.substring(indexOfFirstToken, indexOfSecondToken + tokenSize);
+            if (!injectionTemplate.contains("."))
+                continue;
+            injectionTemplates.add(injectionTemplate);
 
         }
 
@@ -95,24 +134,22 @@ class KIInjectionEngine {
 
     /**
      * The Injection Cache is meant to link a content object with it's corresponding
-     * KIClassCongifuration object to ease access to it, and enhance performance
+     * KIClassConfiguration object to ease access to it, and enhance performance
      */
-    public class InjectionEngineCache {
+    class InjectionEngineCache {
 
-        private KIClassConfiguration classConfig;
-        private Object contentObject;
+        private final KIClassConfiguration classConfig;
+        private final Object contentObject;
 
-        public InjectionEngineCache(KIClassConfiguration classConfig, Object contentObject) {
+        InjectionEngineCache(KIClassConfiguration classConfig, Object contentObject) {
             this.classConfig = classConfig;
             this.contentObject = contentObject;
         }
 
-        public KIClassConfiguration getClassConfig() {
-            return classConfig;
-        }
-
-        public Object getContentObject() {
-            return contentObject;
+        Object fetchInjection(String methodName) throws ReflectiveOperationException {
+            methodName = classConfig.getMethodName(methodName);
+            Method targetMethod = classConfig.getTargetClass().getMethod(methodName);
+            return targetMethod.invoke(contentObject);
         }
     }
 }

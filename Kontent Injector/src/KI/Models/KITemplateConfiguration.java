@@ -53,10 +53,10 @@ import java.util.Set;
  * Created by Khaled.Hamdy on 2/14/17.
  */
 public class KITemplateConfiguration {
+    private final Map<Class<?>, KIClassConfiguration> classesConfigurations = new HashMap<>();
     private String injectionToken = "$%$";
     private String loopStartWord = "LOOP";
     private String loopEndWord = "ENDLOOP";
-    private Map<Class<?>, KIClassConfiguration> classesConfigurations = new HashMap<>();
 
     /**
      * Gets the injection token used in a template

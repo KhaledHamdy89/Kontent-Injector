@@ -33,7 +33,7 @@ and send an object from ClassA, an object from ClassB and the template string/fi
 
 # How to use it in details:
 ## Configurations:
-The Kontent-Injector is fully configurable, and the KI configurations can be devided into two sections
+The Kontent-Injector is fully configurable, and the KI configurations can be divided into two sections
 ### Templates Configurations:
 The template configurations are related to how templates are written.
 You can change:

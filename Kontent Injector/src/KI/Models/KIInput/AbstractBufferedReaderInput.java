@@ -34,7 +34,7 @@ import java.io.IOException;
  */
 public abstract class AbstractBufferedReaderInput  implements IKIInput{
 
-    private BufferedReader templateReader;
+    private final BufferedReader templateReader;
 
     /**
      * The buffered reader to be used to read the template

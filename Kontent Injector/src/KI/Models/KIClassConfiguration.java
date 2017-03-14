@@ -33,9 +33,9 @@ import java.util.Map;
  * Created by khaled.hamdy on 2/22/17.
  */
 public class KIClassConfiguration {
-    private Class<?> targetClass;
+    private final Class<?> targetClass;
+    private final Map<String, String> methodsAliases = new HashMap<>();
     private String classAlias;
-    private Map<String, String> methodsAliases = new HashMap<>();
 
     /**
      * Initialize the KI class config object that hold's a class' alias and method aliases (if any)
@@ -61,7 +61,7 @@ public class KIClassConfiguration {
      * @return The target class' alias or the class' name if no alias is set
      */
     public String getTargetClassAlias() {
-        return classAlias == null ? targetClass.getName() : classAlias;
+        return classAlias == null ? targetClass.getSimpleName() : classAlias;
     }
 
     /**

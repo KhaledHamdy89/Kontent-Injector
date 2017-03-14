@@ -50,10 +50,8 @@ public class InputValidator {
             return;
         }
 
-        if ((inputObject instanceof Collection<?>)) {
+        if ((inputObject instanceof Collection<?>))
             validateCollection((Collection<?>) inputObject);
-            return;
-        }
     }
 
     /**
@@ -74,5 +72,7 @@ public class InputValidator {
     private static void validateString(String inputObject) throws InvalidInputException {
         if (inputObject.isEmpty())
             throw new InvalidInputException(InvalidityType.EMPTY_STRING);
+        if (inputObject.contains("."))
+            throw new InvalidInputException(InvalidityType.INJECTION_TOKENS_CANT_CONTAIN_DOT);
     }
 }

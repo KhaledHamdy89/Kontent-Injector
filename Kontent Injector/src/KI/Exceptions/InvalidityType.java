@@ -32,6 +32,7 @@ package KI.Exceptions;
 public enum InvalidityType {
     EMPTY_STRING("The alias cannot be an empty string"),
     NULL("The alias/Class cannot be null"),
+    INJECTION_TOKENS_CANT_CONTAIN_DOT("Input cannot contain a dot (.)"),
     INJECTION_KEYWORDS_CONFLICT("The alias cannot be a configuration [Injection token, Loop start word, Loop end word] used in the KI config object"),
     METHOD_DOES_NOT_EXIST("No method was found with the provided name in the target class"),
     METHOD_SHOULD_NOT_HAVE_PARAMETERS("The method provided is expecting parameters, please use a parameter-less method for injection"),
@@ -39,7 +40,7 @@ public enum InvalidityType {
     DUPLICATE_INJECTION_KEYWORD("Duplicate injection keywords, please use a different string"),
     EMPTY_COLLECTION("The collection sent is empty");
 
-    private String errorMessage;
+    private final String errorMessage;
 
     InvalidityType(String errorMessage) {
         this.errorMessage = errorMessage;
