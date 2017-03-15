@@ -103,6 +103,15 @@ public class KITemplateConfiguration {
     }
 
     /**
+     * Get the loop start full word surrounded by the injection token
+     *
+     * @return the full start loop word
+     */
+    public String getLoopStartFullWord() {
+        return injectionToken + getLoopStartWord() + injectionToken;
+    }
+
+    /**
      * Get the loop end word used in a template to indicate the end of a loop
      *
      * @return A string holding the loop end word (Default: ENDLOOP)
@@ -122,6 +131,15 @@ public class KITemplateConfiguration {
         if (loopEndWord.equals(loopStartWord) || loopEndWord.equals(injectionToken))
             throw new InvalidInputException(InvalidityType.DUPLICATE_INJECTION_KEYWORD);
         this.loopEndWord = loopEndWord;
+    }
+
+    /**
+     * Get the loop end full word surrounded by the injection token
+     *
+     * @return the full end loop word
+     */
+    public String getLoopEndFullWord() {
+        return injectionToken + getLoopEndWord() + injectionToken;
     }
 
     /**
