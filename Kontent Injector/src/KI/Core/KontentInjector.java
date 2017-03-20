@@ -72,26 +72,10 @@ public class KontentInjector {
         KIInjectionEngine injectionEngine = new KIInjectionEngine(currentKIConfig, contentObjects);
 
         while ((templateLine = inputMethod.readTemplateLine()) != null) {
-            injectionOutput = "";
-
-            if (!loopBlock.isEmpty())
-                loopBlock += "\n" + templateLine;
-
-            if (templateLine.contains(currentKIConfig.getLoopStartWord())) {
-                loopBlock = templateLine;
+            String processedOutput = injectionEngine.processLine(templateLine);
+            if (processedOutput == null)
                 continue;
-            }
-
-            if (templateLine.contains(currentKIConfig.getLoopEndWord())) {
-                injectionOutput = injectionEngine.InjectLoop(loopBlock);
-                loopBlock = "";
-            }
-
-            if (templateLine.contains(currentKIConfig.getInjectionToken())) {
-                injectionOutput = injectionEngine.InjectSingleLine(templateLine);
-            }
-
-            outputMethod.writeLine(injectionOutput);
+            outputMethod.writeLine(processedOutput);
         }
         outputMethod.handleOutputEnd();
     }

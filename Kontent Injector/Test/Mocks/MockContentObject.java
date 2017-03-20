@@ -22,38 +22,40 @@
  * SOFTWARE.
  */
 
-
-package KI.Models.KIInput;
-
-import java.io.BufferedReader;
-import java.io.IOException;
+package Mocks;
 
 /**
- * An abstract class handling buffered reader inputs
- * Created by khaled.hamdy on 3/9/17.
+ * MockContentObject is meant to act as a mock object providing fixed output
+ * to be used for content injection unit tests
+ * Created by khaled.hamdy on 3/16/17.
  */
-public abstract class AbstractBufferedReaderInput  implements IKIInput{
 
-    private final BufferedReader templateReader;
+public class MockContentObject {
+
+    public static final String EXPECTED_STRING_FROM_STRING = "STRING INJECTION";
+    public static final String EXPECTED_STRING_FROM_OBJECT = "OBJECT INJECTION";
 
     /**
-     * The buffered reader to be used to read the template
-     * @param templateReader Buffered Reader to be used when readTemplateLine is called
+     * This method should always return the .toString() method of the MockContentObject
+     * class
+     *
+     * @return the value in the constant EXPECTED_STRING_FROM_OBJECT = "OBJECT INJECTION"
      */
-    AbstractBufferedReaderInput(BufferedReader templateReader) {
-        this.templateReader = templateReader;
+    public Object methodReturnsMockContentObject() {
+        return new MockContentObject();
+    }
+
+    /**
+     * This method should always return the value of the constant EXPECTED_STRING_FROM_STRING
+     *
+     * @return EXPECTED_STRING_FROM_STRING = "STRING INJECTION"
+     */
+    public String methodReturnsString() {
+        return EXPECTED_STRING_FROM_STRING;
     }
 
     @Override
-    public String readTemplateLine() {
-        try {
-            String line = templateReader.readLine();
-            if (line == null)
-                templateReader.close();
-            return line;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public String toString() {
+        return EXPECTED_STRING_FROM_OBJECT;
     }
 }
