@@ -68,7 +68,7 @@ public class LoopKInjectorTest extends AbstractKInjectorsTest {
         LoopKInjector injectionEngine = new LoopKInjector(templateConfig, injectionCache);
 
         String templateLine = "This is how *LOOP*loop #*MockContentObject.methodReturnStringList* *ENDLOOP*injection is done!";
-        String expectedLine = "This is how loop #1 loop #2 loop #3 loop #4 loop #5 loop #Cool injection is done!";
+        String expectedLine = "This is how loop #1 loop #2 loop #3 loop #Cool injection is done!";
         injectionEngine.inspectLine(templateLine);
         String injectedLine = startInjectionProcess(injectionEngine);
         assertTrue(expectedLine.equals(injectedLine));
@@ -83,7 +83,7 @@ public class LoopKInjectorTest extends AbstractKInjectorsTest {
 
         String templateLine = "This is how *LOOP*loop #*MockContentObject.methodReturnStringList*";
         String templateLine2 = "*ENDLOOP*injection is done!";
-        String expectedLine = "This is how loop #1\nloop #2\nloop #3\nloop #4\nloop #5\nloop #Cool\ninjection is done!";
+        String expectedLine = "This is how loop #1\nloop #2\nloop #3\nloop #Cool\ninjection is done!";
         injectionEngine.inspectLine(templateLine);
         assertTrue(injectionEngine.isActive());
         assertFalse(injectionEngine.isReadyForProcessing());

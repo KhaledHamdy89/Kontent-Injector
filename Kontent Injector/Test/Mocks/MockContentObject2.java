@@ -33,41 +33,41 @@ import java.util.List;
  * Created by khaled.hamdy on 3/16/17.
  */
 
-public class MockContentObject {
+public class MockContentObject2 {
 
-    public static final String EXPECTED_STRING_FROM_STRING = "STRING INJECTION";
-    public static final String EXPECTED_STRING_FROM_OBJECT = "OBJECT INJECTION";
+    public static final String EXPECTED_STRING_FROM_STRING = "STRING INJECTION V2";
+    public static final String EXPECTED_STRING_FROM_OBJECT = "OBJECT INJECTION V2";
 
     /**
      * This method should always return the .toString() method of the MockContentObject
      * class
      *
-     * @return the value in the constant EXPECTED_STRING_FROM_OBJECT = "OBJECT INJECTION"
+     * @return the value in the constant EXPECTED_STRING_FROM_OBJECT = "OBJECT INJECTION V2"
      */
     public Object methodReturnsMockContentObject() {
-        return new MockContentObject();
+        return new MockContentObject2();
     }
 
     /**
      * This method should always return the value of the constant EXPECTED_STRING_FROM_STRING
      *
-     * @return EXPECTED_STRING_FROM_STRING = "STRING INJECTION"
+     * @return EXPECTED_STRING_FROM_STRING = "STRING INJECTION V2"
      */
     public String methodReturnsString() {
         return EXPECTED_STRING_FROM_STRING;
     }
 
     /**
-     * This method should always return a list containing strings "1", "2", "3", "Cool"
+     * This method should always return a list containing strings "1 V2", "2 V2", "3 V2", "Cool V2"
      *
-     * @return A list containing strings "1", "2", "3", "Cool"
+     * @return A list containing strings "1 V2", "2 V2", "3 V2", "Cool V2"
      */
     public List<String> methodReturnStringList() {
         List<String> resultList = new ArrayList<>();
-        resultList.add("1");
-        resultList.add("2");
-        resultList.add("3");
-        resultList.add("Cool");
+        resultList.add("1 V2");
+        resultList.add("2 V2");
+        resultList.add("3 V2");
+        resultList.add("Cool V2");
         return resultList;
     }
 

@@ -98,10 +98,10 @@ class KIInjectionEngine {
             if (hasActive && !kinjector.isActive())
                 return null;
 
-            if (kinjector.isActive())
-                hasActive = true;
-
             kinjector.inspectLine(templateLine);
+
+            hasActive = kinjector.isActive();
+
             if (kinjector.isReadyForProcessing()) {
                 return kinjector.processInjection();
             }

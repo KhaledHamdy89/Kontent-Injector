@@ -45,7 +45,7 @@ public class StringBuilderOutput implements IKIOutput {
 
     @Override
     public void writeLine(String outputLine) {
-        outputStringBuilder.append(outputLine);
+        outputStringBuilder.append(outputLine + "\n");
     }
 
     @Override

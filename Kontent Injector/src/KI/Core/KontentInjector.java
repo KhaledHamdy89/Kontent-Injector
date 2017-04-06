@@ -62,13 +62,10 @@ public class KontentInjector {
      * @param outputMethod   Used by the KI to write the generated output after injection
      * @param contentObjects The objects containing the content to be injected into a template
      */
-    private void injectValues(IKIInput inputMethod, IKIOutput outputMethod, Object... contentObjects) throws ReflectiveOperationException {
+    public void injectValues(IKIInput inputMethod, IKIOutput outputMethod, Object... contentObjects) throws ReflectiveOperationException {
         if (contentObjects.length == 0)
             return;
-
         String templateLine;
-        String loopBlock = "";
-        String injectionOutput;
         KIInjectionEngine injectionEngine = new KIInjectionEngine(currentKIConfig, contentObjects);
 
         while ((templateLine = inputMethod.readTemplateLine()) != null) {
@@ -77,6 +74,7 @@ public class KontentInjector {
                 continue;
             outputMethod.writeLine(processedOutput);
         }
+
         outputMethod.handleOutputEnd();
     }
 
