@@ -132,4 +132,4 @@ Element T3.
 ```
 
 ## Conditions:
-PLANNED
+PLANNED TO BE SUPPORTED IN THE NEAR FUTURE
