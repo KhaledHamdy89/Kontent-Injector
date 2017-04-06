@@ -1,3 +1,6 @@
+```
+//(Project integration in progress...)
+```
 # [Kontent-Injector](https://khaledhamdy89.github.io/Kontent-Injector/)
 
 The Kontent-Injector is a library that allows developers to generate files from templates easily and hassle-free.
@@ -48,4 +51,6 @@ The value is: #Class.Method#
 ### Classes Configurations:
 Classes configurations are simply for protection and flexibility. The KI can let you define aliases for your classes, so you don't need to use your classes' names in the template, and the same goes for methods.
 ## Loops:
+In progress
 ## Conditions:
+In progress
