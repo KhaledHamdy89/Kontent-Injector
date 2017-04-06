@@ -1,6 +1,4 @@
-```
-//(Project integration in progress...)
-```
+
 # [Kontent-Injector](https://khaledhamdy89.github.io/Kontent-Injector/)
 
 The Kontent-Injector is a library that allows developers to generate files from templates easily and hassle-free.
@@ -51,6 +49,87 @@ The value is: #Class.Method#
 ### Classes Configurations:
 Classes configurations are simply for protection and flexibility. The KI can let you define aliases for your classes, so you don't need to use your classes' names in the template, and the same goes for methods.
 ## Loops:
-In progress
+Loops allow you to have parts of your template repeated based on the passed content.
+So for example if you have a list that contains the values "T1", "T2", "T3".
+
+and you want to generate something that looks like that:
+```
+Element T1. Element T2. Element T3. 
+```
+
+your template will look something like this:
+```
+$%$LOOP$%$Element $%$MyClass.MyMethodReturningList$%$. $%$ENDLOOP$%$
+```
+And of course, remember you can use whatever you'd like as an injection token.
+
+You can create a "Single line loop" or "Multiple Lines Loop"
+To create a "Single Line Loop", simply have the Loop start and Loop end words on the same line, like so:
+
+```
+$%$LOOP$%$Element $%$MyClass.MyMethodReturningList$%$. $%$ENDLOOP$%$
+```
+
+and to have it generated on multiple lines, make the end loop word on the next line, like so:
+
+```
+$%$LOOP$%$Element $%$MyClass.MyMethodReturningList$%$. 
+$%$ENDLOOP$%$
+```
+This will generate:
+```
+Element T1. 
+Element T2. 
+Element T3. 
+```
+
 ## Conditions:
-In progress
+PLANNED
+
+
+So Finally,
+for the following template:
+```
+Let's test some injection!
+
+We first start off by testing a single line injection
+Awesome KInjector says: @@MockContentObject.methodReturnsString@@
+now we test using a class alias and a method alias! @@Mock2.The_S_Method@@
+now! A class Alias and no method alias @@Mock2.methodReturnsMockContentObject@@
+For our big finale! LOOOOOOOOOPS
+
+Single Line: @@LOOP@@element: @@MockContentObject.methodReturnStringList@@ @@ENDLOOP@@
+AND MULTILINE!! @@LOOP@@here you go... @@Mock2.methodReturnStringList@@ ...
+repeat!! @@ENDLOOP@@
+Report...
+Everything is AWESOME!
+
+```
+
+With a single line of code!
+```
+KontentInjector kinjector = new KontentInjector();
+kinjector.injectValues(input, output, new MockContentObject(), new MockContentObject2());
+```
+
+This will be GENERATED!
+
+```
+Let's test some injection!
+
+We first start off by testing a single line injection
+Awesome KInjector says: STRING INJECTION
+now we test using a class alias and a method alias! STRING INJECTION V2
+now! A class Alias and no method alias OBJECT INJECTION V2
+For our big finale! LOOOOOOOOOPS
+
+Single Line: element: 1 element: 2 element: 3 element: Cool
+AND MULTILINE!! here you go... 1 V2 ...
+repeat!! here you go... 2 V2 ...
+repeat!! here you go... 3 V2 ...
+repeat!! here you go... Cool V2 ...
+repeat!!
+Report...
+Everything is AWESOME!
+
+```
