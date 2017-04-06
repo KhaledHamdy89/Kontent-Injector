@@ -24,6 +24,9 @@
 
 package Mocks;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * MockContentObject is meant to act as a mock object providing fixed output
  * to be used for content injection unit tests
@@ -52,6 +55,22 @@ public class MockContentObject {
      */
     public String methodReturnsString() {
         return EXPECTED_STRING_FROM_STRING;
+    }
+
+    /**
+     * This method should always return a list containing strings "1", "2", "3", "4", "5", "Cool"
+     *
+     * @return A list containing strings "1", "2", "3", "4", "5", "Cool"
+     */
+    public List<String> methodReturnStringList() {
+        List<String> resultList = new ArrayList<>();
+        resultList.add("1");
+        resultList.add("2");
+        resultList.add("3");
+        resultList.add("4");
+        resultList.add("5");
+        resultList.add("Cool");
+        return resultList;
     }
 
     @Override

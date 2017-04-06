@@ -30,7 +30,7 @@ import KI.Models.KITemplateConfiguration;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The abstract KInjector is the abstract class defining the common methods expected from KInjectors to be used for injection
@@ -119,7 +119,7 @@ public abstract class AbstractKInjector implements Comparable<AbstractKInjector>
      */
     protected Object fetchInjectionValue(String injectionTemplate) throws ReflectiveOperationException {
 
-        injectionTemplate = injectionTemplate.replaceAll(Matcher.quoteReplacement(templateConfig.getInjectionToken()), "");
+        injectionTemplate = injectionTemplate.replaceAll(Pattern.quote(templateConfig.getInjectionToken()), "");
 
         String[] injectionTemplateParts = injectionTemplate.split("\\.");
 

@@ -24,14 +24,9 @@
 
 package KI.Core.KInjectors;
 
-import KI.Core.InjectionEngineCache;
-import KI.Models.KIClassConfiguration;
 import KI.Models.KITemplateConfiguration;
 import Mocks.MockContentObject;
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -40,29 +35,10 @@ import static org.junit.Assert.assertTrue;
  * The Single Line KInjector unit tests
  * Created by khaled.hamdy on 3/16/17.
  */
-public class SingleLineKInjectorTest {
-
-    private Map<String, InjectionEngineCache> injectionCache;
-
-    /**
-     * Initialize the injection cache map
-     *
-     * @param classesConfigurations Classes configuration from the injection template
-     * @param contentObjects        Objects holding the content to be injected
-     */
-    private void initializeCache(Map<Class<?>, KIClassConfiguration> classesConfigurations, Object[] contentObjects) {
-        injectionCache = new HashMap<>();
-        for (Object contentObject : contentObjects) {
-            Class<?> objectClass = contentObject.getClass();
-            KIClassConfiguration classConfig = classesConfigurations.getOrDefault(objectClass, new KIClassConfiguration(objectClass));
-            InjectionEngineCache injectionCache = new InjectionEngineCache(contentObject, classConfig);
-
-            this.injectionCache.put(classConfig.getTargetClassAlias(), injectionCache);
-        }
-    }
+public class SingleLineKInjectorTest extends AbstractKInjectorsTest {
 
     @Test
-    public void injectSingleLine_LineWithoutInjection_NoConfigs() throws Exception {
+    public void injectSingleLine_LineWithoutInjection_NotActiveNotReady() {
         KITemplateConfiguration templateConfig = new KITemplateConfiguration();
         initializeCache(templateConfig.getClassesConfigurations(), new Object[]{new MockContentObject()});
         SingleLineKInjector injectionEngine = new SingleLineKInjector(templateConfig, injectionCache);
@@ -74,7 +50,7 @@ public class SingleLineKInjectorTest {
     }
 
     @Test
-    public void injectSingleLine_LineWithLoopWords_WithConfigs() throws Exception {
+    public void injectSingleLine_LineWithLoopWords_NotActiveNotReady() throws Exception {
         KITemplateConfiguration templateConfig = new KITemplateConfiguration();
         templateConfig.setInjectionToken("^^");
         initializeCache(templateConfig.getClassesConfigurations(), new Object[]{new MockContentObject()});

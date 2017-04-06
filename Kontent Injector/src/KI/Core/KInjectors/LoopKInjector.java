@@ -31,7 +31,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The KInjector responsible for handling loop injections
@@ -86,9 +86,10 @@ public class LoopKInjector extends AbstractKInjector {
         injectedBlock = injectedBlock.replace(templateConfig.getLoopEndFullWord(), "");
 
         injectedBlock = handleLoopInjection(injectedBlock);
+        injectedBlock = loopBlock.replace(loopExtraction, injectedBlock);
         loopBlock = "";
         isActive = false;
-        return loopBlock.replace(loopExtraction, injectedBlock);
+        return injectedBlock;
     }
 
     /**
@@ -109,7 +110,7 @@ public class LoopKInjector extends AbstractKInjector {
 
         for (int i = 0; i < maxCollectionSize; i++) {
             injectedBlock.append(handleInjectionIteration(i, loopExtraction, injectionCollections));
-            injectedBlock.append(isMultilineLoop ? "\n" : " ");
+            //injectedBlock.append(isMultilineLoop ? "\n" : "");
         }
 
         return injectedBlock.toString();
@@ -129,7 +130,7 @@ public class LoopKInjector extends AbstractKInjector {
             String injectionTemplate = injectionEntry.getKey();
             Object injectionObject = injectionEntry.getValue();
             if (!(injectionObject instanceof Collection) && !(injectionObject instanceof Object[])) {
-                injectedIteration = injectedIteration.replaceAll(Matcher.quoteReplacement(injectionTemplate), injectionObject.toString());
+                injectedIteration = injectedIteration.replaceAll(Pattern.quote(injectionTemplate), injectionObject.toString());
                 continue;
             }
 
@@ -137,9 +138,9 @@ public class LoopKInjector extends AbstractKInjector {
                 injectionCollections.put(injectionTemplate, injectionObject = ((Collection<?>) injectionObject).toArray());
 
             Object[] injectionObjectsArray = (Object[]) injectionObject;
-            String injectionValue = injectionObjectsArray.length < index ? injectionObjectsArray[index].toString() : "";
+            String injectionValue = index < injectionObjectsArray.length ? injectionObjectsArray[index].toString() : "";
 
-            injectedIteration = injectedIteration.replaceAll(Matcher.quoteReplacement(injectionTemplate), injectionValue);
+            injectedIteration = injectedIteration.replaceAll(Pattern.quote(injectionTemplate), injectionValue);
         }
         return injectedIteration;
     }
